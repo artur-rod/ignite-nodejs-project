@@ -1,7 +1,12 @@
 import { getRepository, Repository } from "typeorm";
 
-import { Category } from "../../entities/category";
-import { ICategoriesRepository, ICategoryDTO } from "../ICategoriesRepository";
+import {
+  ICategoriesRepository,
+  // eslint-disable-next-line prettier/prettier
+  ICategoryDTO
+} from "@modules/cars/repositories/ICategoriesRepository";
+
+import { Category } from "../entities/category";
 
 class CategoriesRepository implements ICategoriesRepository {
   private repository: Repository<Category>;

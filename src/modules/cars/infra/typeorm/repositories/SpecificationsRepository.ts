@@ -1,8 +1,12 @@
 import { getRepository, Repository } from "typeorm";
 
-import { Specification } from "../../entities/specification";
-// eslint-disable-next-line prettier/prettier
-import { ICreateSpecification, ISpecificationsRepository } from "../ISpecificationsRepository";
+import {
+  ICreateSpecification,
+  // eslint-disable-next-line prettier/prettier
+  ISpecificationsRepository
+} from "@modules/cars/repositories/ISpecificationsRepository";
+
+import { Specification } from "../entities/specification";
 
 class SpecificationsRepository implements ISpecificationsRepository {
   private repository: Repository<Specification>;
