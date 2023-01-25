@@ -3,7 +3,7 @@ import { Category } from "@modules/cars/infra/typeorm/entities/category";
 import { ICategoriesRepository, ICategoryDTO } from "../ICategoriesRepository";
 
 class CategoriesRepositoryInMemory implements ICategoriesRepository {
-  categories: Category[] = [];
+  private categories: Category[] = [];
 
   async create({ name, description }: ICategoryDTO): Promise<void> {
     const category = new Category();

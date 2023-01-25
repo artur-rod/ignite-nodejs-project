@@ -9,6 +9,7 @@ export class CreateCars1674083987276 implements MigrationInterface {
           {
             name: "id",
             type: "uuid",
+            isPrimary: true,
           },
           {
             name: "name",
