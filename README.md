@@ -73,3 +73,12 @@ Ao realizar a devolução, deverá ser calculado o total do aluguel
 Caso o horário de devolução seja superior ao previsto, deverá ser cobrado multa proporcional aos dias de atraso
 Caso haja multa, deverá ser somado ao total do aluguel
 O usuário deve estar logado na aplicação
+
+# Listagem de alugueis por usuário
+### **- Requisitos Funcionais:**
+
+Deve ser possível realizar a busca de todos os alugueis por usuário
+
+### **- Regras de negócio:**
+
+O usuário deve estar logado na aplicação

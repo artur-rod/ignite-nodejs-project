@@ -10,7 +10,7 @@ class RentalDevolutionController {
     const { id } = request.params;
     const rentalDevolution = await rentalDevolutionUseCase.execute(id);
 
-    return response.status(200).json(rentalDevolution);
+    return response.json(rentalDevolution);
   }
 }
 
