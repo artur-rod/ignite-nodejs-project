@@ -1,5 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
+import { ICarsRepository } from "@modules/cars/repositories/ICarsRepository";
 import { ICreateRentalDTO } from "@modules/rentals/DTOs/ICreateRentalDTO";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
@@ -10,6 +11,8 @@ class CreateRentalUseCase {
   constructor(
     @inject("RentalsRepository")
     private rentalsRepository: IRentalsRepository,
+    @inject("CarsRepository")
+    private carsRepository: ICarsRepository,
     @inject("DateProvider")
     private dateProvider: IDateProvider
   ) {}
@@ -38,11 +41,15 @@ class CreateRentalUseCase {
       throw new AppError("Rental has to have a minimum time of 24 hours");
     }
 
-    return this.rentalsRepository.create({
+    const rental = await this.rentalsRepository.create({
       car_id,
       user_id,
       expected_return_date,
     });
+
+    await this.carsRepository.updateAvailable(car_id, false);
+
+    return rental;
   }
 }
 

@@ -44,7 +44,7 @@ Utilizar o multer para upload dos arquivos
 ### **- Regras de negócio:**
 
 O usuário deve poder cadastrar mais de uma imagem para o mesmo carro
-Somente usuários adminstradores podem cadastrar imagens
+Somente usuários administradores podem cadastrar imagens
 
 # Aluguel de carro
 ### **- Requisitos Funcionais:**
@@ -56,4 +56,20 @@ Deve ser possível cadastrar um aluguel
 O aluguel deve ter duração mínima de 24 horas
 Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para o mesmo usuário
 Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para o mesmo carro
+O usuário deve estar logado na aplicação
+Quando alugado, o status do carro deve ser atualizado para indisponível
+
+# Devolução de carro
+### **- Requisitos Funcionais:**
+
+Deve ser possível realizar a devolução de um carro
+
+### **- Regras de negócio:**
+
+Se o carro for devolvido com menos de 24 horas, deverá ser cobrado diária completa
+Ao realizar a devolução, o carro deverá ser liberado para outro aluguel
+Ao realizar a devolução, o usuário deverá ser liberado para outro aluguel
+Ao realizar a devolução, deverá ser calculado o total do aluguel
+Caso o horário de devolução seja superior ao previsto, deverá ser cobrado multa proporcional aos dias de atraso
+Caso haja multa, deverá ser somado ao total do aluguel
 O usuário deve estar logado na aplicação
