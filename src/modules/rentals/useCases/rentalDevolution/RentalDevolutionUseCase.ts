@@ -36,8 +36,8 @@ class RentalDevolutionUseCase {
     let totalValue = 0;
 
     const delay = this.dateProvider.compareInDays(
-      DATE_NOW,
-      rental.expected_return_date
+      rental.expected_return_date,
+      DATE_NOW
     );
     if (delay > 0) {
       const fineAmount = delay * car.fine_amount;
@@ -48,7 +48,6 @@ class RentalDevolutionUseCase {
 
     rental.end_date = DATE_NOW;
     rental.total = totalValue;
-
     const updateRental = await this.rentalsRepository.create(rental);
     await this.carsRepository.updateAvailable(car.id, true);
 
