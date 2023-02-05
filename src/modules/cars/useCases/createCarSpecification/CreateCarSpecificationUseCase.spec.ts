@@ -43,12 +43,11 @@ describe("Create Car Specification Use Case", () => {
     expect(carWithSpecifications.specifications.length).toBe(1);
   });
 
-  it("Should not be able to add a new specification to a non-existent car", () => {
-    expect(async () => {
-      await createCarSpecificationUseCase.execute({
-        car_id: "12345",
-        specifications_id: ["54321"],
-      });
-    }).rejects.toBeInstanceOf(AppError);
+  it("Should not be able to add a new specification to a non-existent car", async () => {
+    await expect(createCarSpecificationUseCase.execute({
+      car_id: "12345",
+      specifications_id: ["54321"],
+    })
+    ).rejects.toEqual(new AppError("Car does not exists"));
   });
 });
