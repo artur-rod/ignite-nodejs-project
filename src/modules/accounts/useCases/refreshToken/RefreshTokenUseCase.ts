@@ -1,0 +1,74 @@
+import { sign, verify } from "jsonwebtoken";
+import { inject, injectable } from "tsyringe";
+
+import auth from "@config/auth";
+import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
+import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
+import { AppError } from "@shared/errors/AppError";
+
+interface IDecode {
+  email: string;
+  sub: string;
+}
+
+interface IResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+@injectable()
+class RefreshTokenUseCase {
+  constructor(
+    @inject("UsersTokensRepository")
+    private usersTokensRepository: IUsersTokensRepository,
+    @inject("DateProvider")
+    private dateProvider: IDateProvider
+  ) {}
+
+  async execute(refresh_token: string): Promise<IResponse> {
+    const {
+      secret_token,
+      expires_in_token,
+      secret_refresh_token,
+      expires_in_refresh_token,
+      expires_refresh_token_days,
+    } = auth;
+
+    const { email, sub: user_id } = verify(
+      refresh_token,
+      secret_refresh_token
+    ) as IDecode;
+
+    const userToken = await this.usersTokensRepository.findOneByUserIdAndToken(
+      user_id,
+      refresh_token
+    );
+    if (!userToken) {
+      throw new AppError("Invalid Refresh Token");
+    }
+
+    await this.usersTokensRepository.delete(userToken.id);
+
+    const newRefreshToken = sign({ email }, secret_refresh_token, {
+      subject: user_id,
+      expiresIn: expires_in_refresh_token,
+    });
+
+    const expires_date = this.dateProvider.addDays(expires_refresh_token_days);
+
+    await this.usersTokensRepository.create({
+      user_id,
+      refresh_token: newRefreshToken,
+      expires_date,
+    });
+
+    const access_token = sign({}, secret_token, {
+      subject: user_id,
+      expiresIn: expires_in_token,
+    });
+
+    return { access_token, refresh_token: newRefreshToken };
+  }
+}
+
+export { RefreshTokenUseCase };
