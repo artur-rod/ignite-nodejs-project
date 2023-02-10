@@ -30,35 +30,37 @@ class RefreshTokenUseCase {
       secret_token,
       expires_in_token,
       secret_refresh_token,
-      expires_in_refresh_token,
       expires_refresh_token_days,
     } = auth;
 
-    const { email, sub: user_id } = verify(
-      refresh_token,
-      secret_refresh_token
-    ) as IDecode;
-
-    const userToken = await this.usersTokensRepository.findOneByUserIdAndToken(
-      user_id,
+    const userToken = await this.usersTokensRepository.findOneByToken(
       refresh_token
     );
     if (!userToken) {
-      throw new AppError("Invalid Refresh Token");
+      throw new AppError("Refresh Token not found");
     }
 
-    await this.usersTokensRepository.delete(userToken.id);
+    const dateNow = this.dateProvider.dateNow();
 
-    const newRefreshToken = sign({ email }, secret_refresh_token, {
-      subject: user_id,
-      expiresIn: expires_in_refresh_token,
-    });
+    const tokenTime = this.dateProvider.compareInDays(
+      userToken.expires_date,
+      dateNow
+    );
+    if (tokenTime >= 30) {
+      await this.usersTokensRepository.delete(userToken.id);
+      throw new AppError("Expired Refresh Token");
+    }
+
+    const { sub: user_id } = verify(
+      refresh_token,
+      secret_refresh_token
+    ) as IDecode;
 
     const expires_date = this.dateProvider.addDays(expires_refresh_token_days);
 
     await this.usersTokensRepository.create({
       user_id,
-      refresh_token: newRefreshToken,
+      refresh_token,
       expires_date,
     });
 
@@ -67,7 +69,7 @@ class RefreshTokenUseCase {
       expiresIn: expires_in_token,
     });
 
-    return { access_token, refresh_token: newRefreshToken };
+    return { access_token, refresh_token };
   }
 }
 
