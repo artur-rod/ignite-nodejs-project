@@ -1,5 +1,7 @@
 import { ICreateUserDTO } from "@modules/accounts/DTOs/ICreateUserDTO";
 import { UsersRepositoryInMemory } from "@modules/accounts/repositories/in-memory/UsersRepositoryInMemory";
+import { UsersTokensRepositoryInMemory } from "@modules/accounts/repositories/in-memory/UsersTokensRepositoryInMemory";
+import { DayJS } from "@shared/container/providers/DateProvider/implementations/DayJS";
 import { AppError } from "@shared/errors/AppError";
 
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase";
@@ -7,13 +9,19 @@ import { AuthenticateUserUseCase } from "./AuthenticateUserUseCase";
 
 describe("Authenticate User Use Case", () => {
   let userRepositoryInMemory: UsersRepositoryInMemory;
+  let usersTokensRepositoryInMemory: UsersTokensRepositoryInMemory;
+  let dateProvider: DayJS;
   let authenticateUserUseCase: AuthenticateUserUseCase;
   let createUserUseCase: CreateUserUseCase;
 
   beforeEach(() => {
     userRepositoryInMemory = new UsersRepositoryInMemory();
+    usersTokensRepositoryInMemory = new UsersTokensRepositoryInMemory();
+    dateProvider = new DayJS();
     authenticateUserUseCase = new AuthenticateUserUseCase(
-      userRepositoryInMemory
+      userRepositoryInMemory,
+      usersTokensRepositoryInMemory,
+      dateProvider
     );
     createUserUseCase = new CreateUserUseCase(userRepositoryInMemory);
   });
@@ -33,14 +41,15 @@ describe("Authenticate User Use Case", () => {
       password: user.password,
     });
 
-    expect(tryAuthentication).toHaveProperty("token");
+    expect(tryAuthentication).toHaveProperty("access_token");
+    expect(tryAuthentication).toHaveProperty("refresh_token");
   });
 
   it("should not be able to authenticate an nonexistent user", () => {
     expect(async () => {
       await authenticateUserUseCase.execute({
-        email: "unexistent.user@email.com",
-        password: "unexistentPassword",
+        email: "inexistent.user@email.com",
+        password: "inexistentPassword",
       });
     }).rejects.toBeInstanceOf(AppError);
   });

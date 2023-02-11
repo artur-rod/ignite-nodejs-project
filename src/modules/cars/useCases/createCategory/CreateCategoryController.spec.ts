@@ -28,7 +28,7 @@ describe("Create Category Controller", () => {
       password: "admin",
     });
 
-    sessionToken = session.body.token;
+    sessionToken = session.body.access_token;
   });
 
   afterAll(async () => {
