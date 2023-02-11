@@ -31,6 +31,17 @@ class DayJS implements IDateProvider {
   addDays(days: number): Date {
     return dayjs().add(days, "day").toDate();
   }
+
+  addHours(hours: number): Date {
+    return dayjs().add(hours, "hour").toDate();
+  }
+
+  isAfter(start_date: Date, end_date: Date): boolean {
+    const startDateUTC = this.convertToUTC(start_date);
+    const endDateUTC = this.convertToUTC(end_date);
+
+    return dayjs(startDateUTC).isAfter(endDateUTC);
+  }
 }
 
 export { DayJS };

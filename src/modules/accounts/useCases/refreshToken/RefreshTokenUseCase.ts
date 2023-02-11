@@ -42,11 +42,11 @@ class RefreshTokenUseCase {
 
     const dateNow = this.dateProvider.dateNow();
 
-    const tokenTime = this.dateProvider.compareInDays(
-      userToken.expires_date,
-      dateNow
+    const tokenExpired = this.dateProvider.isAfter(
+      dateNow,
+      userToken.expires_date
     );
-    if (tokenTime >= 30) {
+    if (tokenExpired) {
       await this.usersTokensRepository.delete(userToken.id);
       throw new AppError("Expired Refresh Token");
     }
