@@ -46,7 +46,7 @@ class ForgotPasswordMailUseCase {
     );
 
     await this.mailProvider.sendMail({
-      from: "RentalX <noreply@rentalx.com.br>",
+      from: "RentalX <dev.artur.rodrigues@gmail.com>",
       to: `${user.name} <${email}>`,
       subject: "Password Recovery",
       variables: {

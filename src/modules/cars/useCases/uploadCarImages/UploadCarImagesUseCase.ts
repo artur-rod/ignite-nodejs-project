@@ -19,7 +19,7 @@ class UploadCarImagesUseCase {
 
   async execute({ car_id, images_name }: IRequest): Promise<void> {
     images_name.map(async (image_name) => {
-      await this.storageProvider.save(image_name, "/cars");
+      await this.storageProvider.save(image_name, "cars");
       await this.carsImageRepository.create(car_id, image_name);
     });
   }
