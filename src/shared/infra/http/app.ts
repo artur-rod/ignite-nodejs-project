@@ -11,18 +11,19 @@ import { AppError } from "@shared/errors/AppError";
 import databaseConnection from "@shared/infra/typeorm";
 
 import swaggerFile from "../../../swagger.json";
+import rateLimiter from "./middlewares/rateLimiter";
 import { router } from "./routes";
 
+databaseConnection();
 const app = express();
 
-databaseConnection();
+app.use(rateLimiter);
 app.use(cors());
 app.use(express.json());
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 app.use("/files/avatar", express.static(`${upload.tmpFolder}/avatar`));
 app.use("/files/cars", express.static(`${upload.tmpFolder}/cars`));
-
 app.use(router);
 
 app.use(
