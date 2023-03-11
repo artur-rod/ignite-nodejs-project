@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: 16.x
       
+      - name: Git Pull
+        run: git pull
+
       - name: Install Dependencies
         run: yarn
         
@@ -34,7 +37,6 @@ jobs:
           script: |
             cd ~/app/ignite-nodejs-project
             nvm use 16
-            git pull
             yarn
             ./node-modules/.bin/typeorm migration:run
             pm2 restart rentalx
