@@ -32,8 +32,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
 					script: |
-						cd ~/app/ignite-nodejs-project
+            cd ~/app/ignite-nodejs-project
             nvm use 16
             yarn
-						./node-modules/.bin/typeorm migration:run
-						pm2 restart rentalx
+            ./node-modules/.bin/typeorm migration:run
+            pm2 restart rentalx
