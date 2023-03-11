@@ -17,6 +17,8 @@ declare namespace NodeJS {
     AWS_BUCKET_URL: string;
 
     REDIS_HOST: string;
-    REDIS_PORT: number;
+    REDIS_PORT: string;
+
+    SENTRY_DSN: string;
   }
 }
