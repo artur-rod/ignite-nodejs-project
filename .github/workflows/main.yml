@@ -17,13 +17,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-        
+      
       - name: Install Dependencies
         run: yarn
         
       - name: Build Application
         run: yarn build
-      
+        
       - name: Update API
         uses: appleboy/ssh-action@master
         with:
@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
-					script: |
+          script: |
             cd ~/app/ignite-nodejs-project
             nvm use 16
             yarn
