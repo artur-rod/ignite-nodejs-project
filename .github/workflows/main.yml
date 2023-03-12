@@ -17,9 +17,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-      
-      - name: Git Pull
-        run: git pull
 
       - name: Install Dependencies
         run: yarn
@@ -35,7 +32,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/app/ignite-nodejs-project
+            cd app/ignite-nodejs-project
             nvm use 16
             yarn
             ./node-modules/.bin/typeorm migration:run
