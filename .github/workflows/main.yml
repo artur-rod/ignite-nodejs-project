@@ -23,8 +23,18 @@ jobs:
         
       - name: Build Application
         run: yarn build
-        
+
       - name: Update API
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "., !node_modules",
+          target: "~/app/ignite-nodejs-project"
+        
+      - name: Restart PM2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
