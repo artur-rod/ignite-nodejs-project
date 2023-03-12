@@ -24,7 +24,8 @@ jobs:
       - name: Build Application
         run: yarn build
 
-      - uses: appleboy/scp-action@master
+      - name: Update API
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
